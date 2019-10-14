@@ -37,26 +37,28 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, TGAColor color) {
     if (t1.y > t2.y) std::swap(t1, t2);
     int total_height = t2.y - t0.y;
     int segment_height = t1.y - t0.y + 1;
-
     for (int y = t0.y; y <= t1.y ; y++)
     {
-        float alpha = (y - t0.y) / total_height;
-        float beta = (y - t0.y) / segment_height;
-        Vec2i A = t0 + (t2 - t0) * alpha;
-        Vec2i B = t0 + (t1 - t0) * alpha;
+        float alpha = (float)(y - t0.y) / total_height;    //斜率
+        float beta = (float)(y - t0.y) / segment_height;   //斜率
+        Vec2i A = t0 + (t2 - t0) * alpha;           //直线方程
+        Vec2i B = t0 + (t1 - t0) * beta;           //直线方程
         if(A.x > B.x) std::swap(A, B);
-        for (int x = A.x; x < B.x; x++)
-        {
-            /* code */
-        }
-        
-        
+        for (int x = A.x; x <= B.x; x++)
+            image.set(x,y,color);
     }
-    
-    
-
-
-
+    //上半区
+    segment_height = t2.y - t1.y + 1;
+    for (int y = t1.y; y <= t2.y ; y++)
+    {
+        float alpha =(float)(y - t0.y) / total_height;    //斜率
+        float beta = (float)(y - t1.y) / segment_height;   //斜率
+        Vec2i A = t0 + (t2 - t0) * alpha;           //直线方程
+        Vec2i B = t1 + (t2 - t1) * beta;           //直线方程
+        if(A.x > B.x) std::swap(A, B);
+        for (int x = A.x; x <= B.x; x++)
+            image.set(x,y,color);
+    }
 }
 
 int main(int argc, char** argv) {
